@@ -9,8 +9,16 @@ use App\Application\Settings\SettingsInterface;
 use DI\ContainerBuilder;
 use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
+use Psr\Log\LoggerInterface;
 
 require __DIR__ . '/../vendor/autoload.php';
+
+// added
+$dot_env = __DIR__. '/../.env';
+if (is_readable($dot_env)) {
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+    $dotenv->load();
+}
 
 // Instantiate PHP-DI ContainerBuilder
 $containerBuilder = new ContainerBuilder();
@@ -37,6 +45,9 @@ $container = $containerBuilder->build();
 // Instantiate the app
 AppFactory::setContainer($container);
 $app = AppFactory::create();
+if(isset($_ENV['APP_PATH']) && !empty($_ENV['APP_PATH'])) {
+    $app->setBasePath($_ENV['APP_PATH']);
+}
 $callableResolver = $app->getCallableResolver();
 
 // Register middleware
@@ -60,7 +71,8 @@ $request = $serverRequestCreator->createServerRequestFromGlobals();
 
 // Create Error Handler
 $responseFactory = $app->getResponseFactory();
-$errorHandler = new HttpErrorHandler($callableResolver, $responseFactory);
+$logger = $container->get(LoggerInterface::class);
+$errorHandler = new HttpErrorHandler($callableResolver, $responseFactory, $logger);
 
 // Create Shutdown Handler
 $shutdownHandler = new ShutdownHandler($request, $errorHandler, $displayErrorDetails);

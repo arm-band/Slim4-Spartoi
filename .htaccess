@@ -1,15 +1,19 @@
-Options All -Indexes
+SetEnvIf Request_URI "(\.(log|txt|dat|dist|csv|ini|tpl|yml|xml|json|env|htaccess|htpasswd|md)|/(app|bin|logs|migrations|src|tests|tmp|var|vendor)(.)*/)$" ng_dir
+Order Allow,Deny
+Allow from all
+Deny from env=ng_dir
 
-<Files .htaccess>
-order allow,deny
-deny from all
-</Files>
+DirectoryIndex index.html index.php
+
+Options All -Indexes
 
 <IfModule mod_rewrite.c>
   # Redirect to the public folder
   RewriteEngine On
   # RewriteBase /
   RewriteRule ^$ public/ [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule (.*) public/$1 [L]
 
   # Redirect to HTTPS
