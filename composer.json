@@ -38,7 +38,8 @@
         "phpunit/phpunit": "^9.5.20",
         "squizlabs/php_codesniffer": "^3.6",
         "phpmd/phpmd": "^2.12",
-        "zeuxisoo/slim-whoops": "^0.7"
+        "zeuxisoo/slim-whoops": "^0.7",
+        "lulco/phoenix": "^2.1.0"
     },
     "config": {
         "process-timeout": 0,
@@ -59,6 +60,10 @@
         "test": "phpunit",
         "test:coverage": "phpunit --coverage-html coverage",
         "phpcs": "phpcs --standard=PSR2 src/",
-        "phpmd": "phpmd src/ text cleancode,codesize,design,unusedcode"
+        "phpmd": "phpmd src/ text cleancode,codesize,design,unusedcode",
+        "db:migrate": "php vendor/bin/phoenix migrate",
+        "db:rollback": "php vendor/bin/phoenix rollback",
+        "db:status": "php vendor/bin/phoenix status",
+        "db:test": "php vendor/bin/phoenix test"
     }
 }
