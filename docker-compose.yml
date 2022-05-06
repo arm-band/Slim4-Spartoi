@@ -6,6 +6,8 @@ volumes:
 
 services:
     slim:
+        labels:
+            slim4.spartoi.php: "Spartoi PHP"
         build:
             context: ./_docker/dockerfiles/
             dockerfile: Dockerfile
@@ -18,3 +20,32 @@ services:
         volumes:
             - .:/var/www
             - ./logs:/var/www/logs
+    db:
+        labels:
+            slim4.spartoi.mariadb: "Spartoi MariaDB"
+        image: mariadb
+        restart: always
+        ports:
+            - 3306:3306
+        volumes:
+            - ./_docker/mysql:/var/lib/mysql
+            - ./_docker/initdb.d:/docker-entrypoint-initdb.d
+        environment:
+            - MYSQL_ROOT_PASSWORD=pwd
+            - MYSQL_DATABASE=test
+            - MYSQL_USER=user
+            - MYSQL_PASSWORD=pwd
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        labels:
+            slim4.spartoi.phpmyadmin: "Spartoi phpMyAdmin"
+        volumes:
+            - ./_docker/phpmyadmin/sessions:/sessions
+            - ./_docker/phpmyadmin/conf/phpmyadmin-misc.ini:/usr/local/etc/php/conf.d/phpmyadmin-misc.ini
+        environment:
+            - PMA_ARBITRARY=1
+            - PMA_HOST=db
+            - PMA_USER=user
+            - PMA_PASSWORD=pwd
+        ports:
+            - 8081:80
