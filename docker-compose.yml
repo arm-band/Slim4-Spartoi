@@ -7,7 +7,7 @@ volumes:
 services:
     slim:
         build:
-            context: ./_docker/
+            context: ./_docker/dockerfiles/
             dockerfile: Dockerfile
         working_dir: /var/www
         command: php -S 0.0.0.0:8080 -t public
