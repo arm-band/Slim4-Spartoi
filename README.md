@@ -40,3 +40,32 @@ composer test
 ```
 
 That's it! Now go build something cool.
+
+---
+
+# Slim4 Spartoi
+
+## Abstract
+
+Skeleton project by Slim 4.
+
+## Initialize settings
+
+1. Copy `sample.env` and rename it to `.env`.
+2. Copy `sample.env.development` and rename it to `.env.development`, same as copy and rename `sample.env.production` to `.env.production`.
+
+## Settings
+
+1. Enter parameters into `.env`, `.env.development`, and `.env.production`.
+    - If you want to deploy to subdirectory, specify `APP_PATH` start `/`, and **not** end `/`.
+2. If you want to migrate your database, you can use the [lulco\/phoenix](https://github.com/lulco/phoenix).
+    - create `_migrations/*.php`
+    - `composer db:migrate`, `composer db:rollback`, `composer db:status`, `composer db:test`
+
+## Docker Compose
+
+When you want to use shell.
+
+```
+docker-compose exec slim /bin/ash
+```

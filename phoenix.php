@@ -2,16 +2,32 @@
 
 use \Dotenv\Dotenv;
 
-// find environment file
-$dot_env = __DIR__ . '/.env';
-if (is_readable($dot_env)) {
-    $dotenv = Dotenv::createImmutable(__DIR__ . '/');
+// enviroment path
+$dot_env_path = __DIR__ . '/';
+// enviroment basename
+$dot_env_base = $dot_env_path . '.env';
+if (is_readable($dot_env_base)) {
+    $dotenv = Dotenv::createImmutable($dot_env_path);
+    $dotenv->load();
+}
+
+if(!isset($_ENV['SERVER_ENV']) || empty($_ENV['SERVER_ENV'])) {
+    // error read enviroment switch var
+    throw new \Exception('Enviroment isn\'t settings.');
+}
+
+// extension: development or production
+$dot_env_server = $_ENV['SERVER_ENV'] === 'prod' ? '.production' : '.development';
+
+if (is_readable($dot_env_path . $dot_env_server . '.env')) {
+    // reading development or production enviroment
+    $dotenv = Dotenv::createImmutable($dot_env_path, $dot_env_server . '.env');
     $dotenv->load();
 }
 
 return [
     'migration_dirs' => [
-        'first'  => __DIR__ . '/migrations',
+        'first'  => __DIR__ . '/_migrations',
     ],
     'environments' => [
         'local'      => [
@@ -25,11 +41,11 @@ return [
         ],
         'production' => [
             'adapter'  => 'mysql',
-            'host'     => 'production_host',
-            'port'     => 3306, // optional
-            'username' => 'user',
-            'password' => 'pass',
-            'db_name'  => 'my_production_db',
+            'host'     => $_ENV['MYSQL_HOST'],
+            'port'     => (int)$_ENV['MYSQL_PORT'], // optional
+            'username' => $_ENV['MYSQL_USER'],
+            'password' => $_ENV['MYSQL_PASSWORD'],
+            'db_name'  => $_ENV['MYSQL_DBNAME'],
             'charset'  => 'utf8mb4',
         ],
     ],
