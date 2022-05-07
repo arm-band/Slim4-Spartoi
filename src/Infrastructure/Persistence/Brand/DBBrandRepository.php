@@ -7,6 +7,9 @@ namespace App\Infrastructure\Persistence\Brand;
 use App\Domain\Brand\Brand;
 use App\Domain\Brand\BrandNotFoundException;
 use App\Domain\Brand\BrandRepository;
+use Psr\Container\ContainerInterface;
+use App\Application\DBConnection\DBConnectionInterface;
+////use Slim\App;
 
 class DBBrandRepository implements BrandRepository
 {
@@ -14,12 +17,23 @@ class DBBrandRepository implements BrandRepository
      * @var Brand[]
      */
     private array $brands;
+////    private App $app;
 
     /**
      * @param Brand[]|null $brands
      */
-    public function __construct(array $brands = null)
+////    public function __construct(array $brands = null, App $app)
+    public function __construct(array $brands = null, ContainerInterface $c)
     {
+////        $c = $app->getContainer();
+        $dbConnect = $c->get(DBConnectionInterface::class)->get();
+        $dbConnect->setAsGlobal();
+        $dbConnect->bootEloquent();
+        $rows = $dbConnect::select('show databases');
+foreach($rows as $row) {
+    echo $row->Database . PHP_EOL;
+}
+        exit();
         $this->brands = $brands ?? [
             1 => new Brand(1, 'microsoft', 'Microsoft'),
             2 => new Brand(2, 'apple', 'Apple'),

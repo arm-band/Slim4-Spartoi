@@ -8,12 +8,12 @@ use Illuminate\Database\Capsule\Manager;
 
 class DBConnection implements DBConnectionInterface
 {
-    private array $db;
+    private $db;
 
     public function __construct()
     {
-        $db = new Manager;
-        $db->addConnection([
+        $this->db = new Manager;
+        $this->db->addConnection([
             'driver'    => 'mysql',
             'host'      => $_ENV['MYSQL_HOST'],
             'database'  => $_ENV['MYSQL_DBNAME'],
