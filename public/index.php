@@ -6,6 +6,7 @@ use App\Application\Handlers\HttpErrorHandler;
 use App\Application\Handlers\ShutdownHandler;
 use App\Application\ResponseEmitter\ResponseEmitter;
 use App\Application\Settings\SettingsInterface;
+use App\Application\DBConnection\DBConnectionInterface;
 use DI\ContainerBuilder;
 use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
@@ -51,6 +52,10 @@ $settings($containerBuilder);
 // Set up dependencies
 $dependencies = require __DIR__ . '/../app/dependencies.php';
 $dependencies($containerBuilder);
+
+// Set up DBConnection
+$dbconnection = require __DIR__ . '/../app/dbconnection.php';
+$dbconnection($containerBuilder);
 
 // Set up repositories
 $repositories = require __DIR__ . '/../app/repositories.php';
