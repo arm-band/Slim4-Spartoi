@@ -6,16 +6,16 @@ namespace Tests\Infrastructure\Persistence\Brand;
 
 use App\Domain\Brand\Brand;
 use App\Domain\Brand\BrandNotFoundException;
-use App\Infrastructure\Persistence\Brand\InMemoryBrandRepository;
+use App\Infrastructure\Persistence\Brand\DBBrandRepository;
 use Tests\TestCase;
 
-class InMemoryBrandRepositoryTest extends TestCase
+class DBBrandRepositoryTest extends TestCase
 {
     public function testFindAll()
     {
         $brand = new Brand(1, 'microsoft', 'Microsoft');
 
-        $brandRepository = new InMemoryBrandRepository([1 => $brand]);
+        $brandRepository = new DBBrandRepository([1 => $brand]);
 
         $this->assertEquals([$brand], $brandRepository->findAll());
     }
@@ -30,7 +30,7 @@ class InMemoryBrandRepositoryTest extends TestCase
             5 => new Brand(5, 'twitter', 'Twitter'),
         ];
 
-        $brandRepository = new InMemoryBrandRepository();
+        $brandRepository = new DBBrandRepository();
 
         $this->assertEquals(array_values($brands), $brandRepository->findAll());
     }
@@ -39,14 +39,14 @@ class InMemoryBrandRepositoryTest extends TestCase
     {
         $brand = new Brand(1, 'microsoft', 'Microsoft');
 
-        $brandRepository = new InMemoryBrandRepository([1 => $brand]);
+        $brandRepository = new DBBrandRepository([1 => $brand]);
 
         $this->assertEquals($brand, $brandRepository->findBrandOfId(1));
     }
 
     public function testFindBrandOfIdThrowsNotFoundException()
     {
-        $brandRepository = new InMemoryBrandRepository([]);
+        $brandRepository = new DBBrandRepository([]);
         $this->expectException(BrandNotFoundException::class);
         $brandRepository->findBrandOfId(1);
     }

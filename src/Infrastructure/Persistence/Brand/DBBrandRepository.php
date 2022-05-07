@@ -8,7 +8,7 @@ use App\Domain\Brand\Brand;
 use App\Domain\Brand\BrandNotFoundException;
 use App\Domain\Brand\BrandRepository;
 
-class InMemoryBrandRepository implements BrandRepository
+class DBBrandRepository implements BrandRepository
 {
     /**
      * @var Brand[]
