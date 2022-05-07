@@ -13,7 +13,7 @@ class InMemoryBrandRepositoryTest extends TestCase
 {
     public function testFindAll()
     {
-        $brand = new Brand(1, 'bill.gates', 'Bill', 'Gates');
+        $brand = new Brand(1, 'microsoft', 'Microsoft');
 
         $brandRepository = new InMemoryBrandRepository([1 => $brand]);
 
