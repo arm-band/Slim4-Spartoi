@@ -23,8 +23,6 @@ class DBBrandRepository implements BrandRepository
     public function __construct(array $brands = null, ContainerInterface $c)
     {
         $dbConnect = $c->get(DBConnectionInterface::class)->get();
-        $dbConnect->setAsGlobal();
-        $dbConnect->bootEloquent();
         $rows = $dbConnect::select('show databases');
 foreach($rows as $row) {
     echo $row->Database . PHP_EOL;

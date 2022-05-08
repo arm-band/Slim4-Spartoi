@@ -23,6 +23,8 @@ class DBConnection implements DBConnectionInterface
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
         ]);
+        $this->db->setAsGlobal();
+        $this->db->bootEloquent();
     }
     /**
      * @return Object
