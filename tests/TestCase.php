@@ -39,6 +39,10 @@ class TestCase extends PHPUnit_TestCase
         $dependencies = require __DIR__ . '/../app/dependencies.php';
         $dependencies($containerBuilder);
 
+        // Set up DBConnection
+        $dbconnection = require __DIR__ . '/../app/dbconnection.php';
+        $dbconnection($containerBuilder);
+
         // Set up repositories
         $repositories = require __DIR__ . '/../app/repositories.php';
         $repositories($containerBuilder);

@@ -7,6 +7,7 @@ namespace Tests\Infrastructure\Persistence\Brand;
 use App\Domain\Brand\Brand;
 use App\Domain\Brand\BrandNotFoundException;
 use App\Infrastructure\Persistence\Brand\DBBrandRepository;
+use Psr\Container\ContainerInterface;
 use Tests\TestCase;
 
 class DBBrandRepositoryTest extends TestCase
@@ -15,7 +16,11 @@ class DBBrandRepositoryTest extends TestCase
     {
         $brand = new Brand(1, 'microsoft', 'Microsoft');
 
-        $brandRepository = new DBBrandRepository([1 => $brand]);
+        $app = $this->getAppInstance();
+
+        /** @var Container $container */
+        $container = $app->getContainer();
+        $brandRepository = new DBBrandRepository($container, [1 => $brand]);
 
         $this->assertEquals([$brand], $brandRepository->findAll());
     }
@@ -30,7 +35,11 @@ class DBBrandRepositoryTest extends TestCase
             5 => new Brand(5, 'twitter', 'Twitter'),
         ];
 
-        $brandRepository = new DBBrandRepository();
+        $app = $this->getAppInstance();
+
+        /** @var Container $container */
+        $container = $app->getContainer();
+        $brandRepository = new DBBrandRepository($container);
 
         $this->assertEquals(array_values($brands), $brandRepository->findAll());
     }
@@ -39,14 +48,22 @@ class DBBrandRepositoryTest extends TestCase
     {
         $brand = new Brand(1, 'microsoft', 'Microsoft');
 
-        $brandRepository = new DBBrandRepository([1 => $brand]);
+        $app = $this->getAppInstance();
+
+        /** @var Container $container */
+        $container = $app->getContainer();
+        $brandRepository = new DBBrandRepository($container, [1 => $brand]);
 
         $this->assertEquals($brand, $brandRepository->findBrandOfId(1));
     }
 
     public function testFindBrandOfIdThrowsNotFoundException()
     {
-        $brandRepository = new DBBrandRepository([]);
+        $app = $this->getAppInstance();
+
+        /** @var Container $container */
+        $container = $app->getContainer();
+        $brandRepository = new DBBrandRepository($container, []);
         $this->expectException(BrandNotFoundException::class);
         $brandRepository->findBrandOfId(1);
     }

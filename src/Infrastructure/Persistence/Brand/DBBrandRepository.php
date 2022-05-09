@@ -9,32 +9,69 @@ use App\Domain\Brand\BrandNotFoundException;
 use App\Domain\Brand\BrandRepository;
 use Psr\Container\ContainerInterface;
 use App\Application\DBConnection\DBConnectionInterface;
+use Illuminate\Database\Eloquent\Model;
 
-class DBBrandRepository implements BrandRepository
+class DBBrandRepository extends Model implements BrandRepository
 {
     /**
-     * @var Brand[]
+     * @var array
      */
     private array $brands;
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'brands';
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'id';
+    /**
+     * Indicates if the model's ID is auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = true;
+    /**
+     * The data type of the auto-incrementing ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'int';
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = true;
+    /**
+     * The storage format of the model's date columns.
+     *
+     * @var string
+     */
+    protected $dateFormat = 'U';
+    const CREATED_AT = 'created_at';
 
     /**
+     * @param ContainerInterface $c
      * @param Brand[]|null $brands
      */
-    public function __construct(array $brands = null, ContainerInterface $c)
+    public function __construct(ContainerInterface $c, array $brands = null)
     {
         $dbConnect = $c->get(DBConnectionInterface::class)->get();
-        $rows = $dbConnect::select('show databases');
-foreach($rows as $row) {
-    echo $row->Database . PHP_EOL;
-}
-        exit();
-        $this->brands = $brands ?? [
-            1 => new Brand(1, 'microsoft', 'Microsoft'),
-            2 => new Brand(2, 'apple', 'Apple'),
-            3 => new Brand(3, 'meta', 'Meta'),
-            4 => new Brand(4, 'snapchat', 'Snapchat'),
-            5 => new Brand(5, 'twitter', 'Twitter'),
-        ];
+        $dbBrands = $dbConnect->table($this->table)->get();
+        $brandsArray = [];
+        foreach ($dbBrands as $val) {
+            $brandsArray[$val->id] = new Brand(
+                $val->id,
+                $val->brandname,
+                $val->name
+            );
+        }
+        $this->brands = $brands ?? $brandsArray;
     }
 
     /**
@@ -53,7 +90,6 @@ foreach($rows as $row) {
         if (!isset($this->brands[$id])) {
             throw new BrandNotFoundException();
         }
-
         return $this->brands[$id];
     }
 }
