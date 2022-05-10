@@ -26,15 +26,15 @@ services:
         image: mariadb
         restart: always
         ports:
-            - 3306:3306
+            - ${MYSQL_PORT:-3306}:${MYSQL_PORT:-3306}
         volumes:
             - ./_docker/mysql/mysql:/var/lib/mysql
             - ./_docker/mysql/initdb.d:/docker-entrypoint-initdb.d
         environment:
             - MYSQL_ROOT_PASSWORD=pwd
-            - MYSQL_DATABASE=test
-            - MYSQL_USER=user
-            - MYSQL_PASSWORD=pwd
+            - MYSQL_DATABASE=${MYSQL_DBNAME:-test}
+            - MYSQL_USER=${MYSQL_USER:-user}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD:-pwd}
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
         labels:
@@ -44,8 +44,8 @@ services:
             - ./_docker/phpmyadmin/conf/phpmyadmin-misc.ini:/usr/local/etc/php/conf.d/phpmyadmin-misc.ini
         environment:
             - PMA_ARBITRARY=1
-            - PMA_HOST=db
-            - PMA_USER=user
-            - PMA_PASSWORD=pwd
+            - PMA_HOST=${MYSQL_HOST:-db}
+            - PMA_USER=${MYSQL_USER:-user}
+            - PMA_PASSWORD=${MYSQL_PASSWORD:-pwd}
         ports:
             - 8081:80

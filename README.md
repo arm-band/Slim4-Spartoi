@@ -64,8 +64,26 @@ Skeleton project by Slim 4.
 
 ## Docker Compose
 
-When you want to use shell.
+When you want to develop by Docker container,
+
+```
+docker-compose up -d
+```
+
+At this time, enviroment parameters set default value, e.g. default value of `MYSQL_DATABASE=${MYSQL_DBNAME:-test}` is `test`.
+
+And, you want to use predetermined `.env` file, e.g. `.development.env`,
+
+```
+docker-compose --env-file .development.env up -d
+```
+
+When you want to use shell,
 
 ```
 docker-compose exec slim /bin/ash
+
+docker-compose exec db /bin/bash
 ```
+
+n.b. shell of php:7-alpine is **ash**, but shell of mariadb is **bash**.
