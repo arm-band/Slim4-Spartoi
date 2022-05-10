@@ -7,4 +7,5 @@
 .phpunit.result.cache
 .env
 .*.env
-/_docker/mysql/
+/_docker/mysql/*
+!/_docker/mysql/.gitkeep
