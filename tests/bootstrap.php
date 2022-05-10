@@ -1,15 +1,16 @@
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
+// app root path
+$app_root_path = __DIR__ . '/../';
+
+require $app_root_path . 'vendor/autoload.php';
 
 use \Dotenv\Dotenv;
 
-// enviroment path
-$dot_env_path = __DIR__ . '/../';
 // enviroment basename
-$dot_env_base = $dot_env_path . '.env';
+$dot_env_base = $app_root_path . '.env';
 if (is_readable($dot_env_base)) {
-    $dotenv = Dotenv::createImmutable($dot_env_path);
+    $dotenv = Dotenv::createImmutable($app_root_path);
     $dotenv->load();
 }
 
@@ -21,8 +22,8 @@ if(!isset($_ENV['SERVER_ENV']) || empty($_ENV['SERVER_ENV'])) {
 // extension: development or production
 $dot_env_server = $_ENV['SERVER_ENV'] === 'prod' ? '.production' : '.development';
 
-if (is_readable($dot_env_path . $dot_env_server . '.env')) {
+if (is_readable($app_root_path . $dot_env_server . '.env')) {
     // reading development or production enviroment
-    $dotenv = Dotenv::createImmutable($dot_env_path, $dot_env_server . '.env');
+    $dotenv = Dotenv::createImmutable($app_root_path, $dot_env_server . '.env');
     $dotenv->load();
 }

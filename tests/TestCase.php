@@ -26,25 +26,28 @@ class TestCase extends PHPUnit_TestCase
      */
     protected function getAppInstance(): App
     {
+        // app root path
+        $app_root_path = __DIR__ . '/../';
+
         // Instantiate PHP-DI ContainerBuilder
         $containerBuilder = new ContainerBuilder();
 
         // Container intentionally not compiled for tests.
 
         // Set up settings
-        $settings = require __DIR__ . '/../app/settings.php';
+        $settings = require $app_root_path . 'app/settings.php';
         $settings($containerBuilder);
 
         // Set up dependencies
-        $dependencies = require __DIR__ . '/../app/dependencies.php';
+        $dependencies = require $app_root_path . 'app/dependencies.php';
         $dependencies($containerBuilder);
 
         // Set up DBConnection
-        $dbconnection = require __DIR__ . '/../app/dbconnection.php';
+        $dbconnection = require $app_root_path . 'app/dbconnection.php';
         $dbconnection($containerBuilder);
 
         // Set up repositories
-        $repositories = require __DIR__ . '/../app/repositories.php';
+        $repositories = require $app_root_path . 'app/repositories.php';
         $repositories($containerBuilder);
 
         // Build PHP-DI Container instance
@@ -55,11 +58,11 @@ class TestCase extends PHPUnit_TestCase
         $app = AppFactory::create();
 
         // Register middleware
-        $middleware = require __DIR__ . '/../app/middleware.php';
+        $middleware = require $app_root_path . 'app/middleware.php';
         $middleware($app);
 
         // Register routes
-        $routes = require __DIR__ . '/../app/routes.php';
+        $routes = require $app_root_path . 'app/routes.php';
         $routes($app);
 
         return $app;
