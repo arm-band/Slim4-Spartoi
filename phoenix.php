@@ -1,13 +1,22 @@
 <?php
 
+const TIMEZONE = 'Asia/Tokyo';
+const LANG = 'ja';
+const ENCODE = 'UTF-8';
+
+date_default_timezone_set(TIMEZONE);
+mb_language(LANG);
+mb_internal_encoding(ENCODE);
+
+// app root path
+const APPROOT_PATH = __DIR__ . '/';
+
 use \Dotenv\Dotenv;
 
-// enviroment path
-$dot_env_path = __DIR__ . '/';
 // enviroment basename
-$dot_env_base = $dot_env_path . '.env';
-if (is_readable($dot_env_base)) {
-    $dotenv = Dotenv::createImmutable($dot_env_path);
+const DOTENV_BASE = APPROOT_PATH . '.env';
+if (is_readable(DOTENV_BASE)) {
+    $dotenv = Dotenv::createImmutable(APPROOT_PATH);
     $dotenv->load();
 }
 
@@ -17,11 +26,11 @@ if(!isset($_ENV['SERVER_ENV']) || empty($_ENV['SERVER_ENV'])) {
 }
 
 // extension: development or production
-$dot_env_server = $_ENV['SERVER_ENV'] === 'prod' ? '.production' : '.development';
+$DOT_ENV_SERVER = $_ENV['SERVER_ENV'] === 'prod' ? '.production' : '.development';
 
-if (is_readable($dot_env_path . $dot_env_server . '.env')) {
+if (is_readable(APPROOT_PATH . $DOT_ENV_SERVER . '.env')) {
     // reading development or production enviroment
-    $dotenv = Dotenv::createImmutable($dot_env_path, $dot_env_server . '.env');
+    $dotenv = Dotenv::createImmutable(APPROOT_PATH, $DOT_ENV_SERVER . '.env');
     $dotenv->load();
 }
 

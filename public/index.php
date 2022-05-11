@@ -12,15 +12,15 @@ use Slim\Factory\ServerRequestCreatorFactory;
 use Psr\Log\LoggerInterface;
 
 // app root path
-$app_root_path = __DIR__ . '/../';
+const APPROOT_PATH = __DIR__ . '/../';
 
-require $app_root_path . 'vendor/autoload.php';
+require APPROOT_PATH . 'vendor/autoload.php';
 
 // added code
 // enviroment basename
-$dot_env_base = $app_root_path . '.env';
-if (is_readable($dot_env_base)) {
-    $dotenv = Dotenv\Dotenv::createImmutable($app_root_path);
+const DOTENV_BASE = APPROOT_PATH . '.env';
+if (is_readable(DOTENV_BASE)) {
+    $dotenv = Dotenv\Dotenv::createImmutable(APPROOT_PATH);
     $dotenv->load();
 }
 
@@ -30,11 +30,11 @@ if(!isset($_ENV['SERVER_ENV']) || empty($_ENV['SERVER_ENV'])) {
 }
 
 // extension: development or production
-$dot_env_server = $_ENV['SERVER_ENV'] === 'prod' ? '.production' : '.development';
+$DOT_ENV_SERVER = $_ENV['SERVER_ENV'] === 'prod' ? '.production' : '.development';
 
-if (is_readable($app_root_path . $dot_env_server . '.env')) {
+if (is_readable(APPROOT_PATH . $DOT_ENV_SERVER . '.env')) {
     // reading development or production enviroment
-    $dotenv = Dotenv\Dotenv::createImmutable($app_root_path, $dot_env_server . '.env');
+    $dotenv = Dotenv\Dotenv::createImmutable(APPROOT_PATH, $DOT_ENV_SERVER . '.env');
     $dotenv->load();
 }
 
@@ -42,23 +42,23 @@ if (is_readable($app_root_path . $dot_env_server . '.env')) {
 $containerBuilder = new ContainerBuilder();
 
 if (false) { // Should be set to true in production
-	$containerBuilder->enableCompilation($app_root_path . 'var/cache');
+	$containerBuilder->enableCompilation(APPROOT_PATH . 'var/cache');
 }
 
 // Set up settings
-$settings = require $app_root_path . 'app/settings.php';
+$settings = require APPROOT_PATH . 'app/settings.php';
 $settings($containerBuilder);
 
 // Set up dependencies
-$dependencies = require $app_root_path . 'app/dependencies.php';
+$dependencies = require APPROOT_PATH . 'app/dependencies.php';
 $dependencies($containerBuilder);
 
 // Set up DBConnection
-$dbconnection = require $app_root_path . 'app/dbconnection.php';
+$dbconnection = require APPROOT_PATH . 'app/dbconnection.php';
 $dbconnection($containerBuilder);
 
 // Set up repositories
-$repositories = require $app_root_path . 'app/repositories.php';
+$repositories = require APPROOT_PATH . 'app/repositories.php';
 $repositories($containerBuilder);
 
 // Build PHP-DI Container instance
@@ -73,11 +73,11 @@ if(isset($_ENV['APP_PATH']) && !empty($_ENV['APP_PATH'])) {
 $callableResolver = $app->getCallableResolver();
 
 // Register middleware
-$middleware = require $app_root_path . 'app/middleware.php';
+$middleware = require APPROOT_PATH . 'app/middleware.php';
 $middleware($app);
 
 // Register routes
-$routes = require $app_root_path . 'app/routes.php';
+$routes = require APPROOT_PATH . 'app/routes.php';
 $routes($app);
 
 /** @var SettingsInterface $settings */
