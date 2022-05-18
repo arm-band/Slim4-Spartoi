@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\BrandUser;
 
+use Psr\Container\ContainerInterface;
+use App\Domain\Brand\Brand;
+use App\Domain\Brand\BrandRepository;
+use App\Domain\User\UserRepository;
 use App\Domain\BrandUser\BrandUser;
 use App\Domain\BrandUser\BrandUserNotFoundException;
 use App\Domain\BrandUser\BrandUserRepository;
@@ -16,17 +20,28 @@ class InMemoryBrandUserRepository implements BrandUserRepository
     private array $brandusers;
 
     /**
+     * @param ContainerInterface $c
      * @param BrandUser[]|null $brandusers
      */
-    public function __construct(array $brandusers = null)
+    public function __construct(ContainerInterface $c, array $brandusers = null)
     {
-        $this->brandusers = $brandusers ?? [
-            1 => new BrandUser(1, 'microsoft', 'Microsoft', 'bill.gates', 'Bill', 'Gates'),
-            2 => new BrandUser(2, 'apple', 'Apple', 'steve.jobs', 'Steve', 'Jobs'),
-            3 => new BrandUser(3, 'meta', 'Meta', 'mark.zuckerberg', 'Mark', 'Zuckerberg'),
-            4 => new BrandUser(4, 'snapchat', 'Snapchat', 'evan.spiegel', 'Evan', 'Spiegel'),
-            5 => new BrandUser(5, 'twitter', 'Twitter', 'jack.dorsey', 'Jack', 'Dorsey'),
-        ];
+        $brandRepository = $c->get(BrandRepository::class);
+        $userRepository = $c->get(UserRepository::class);
+
+        $joinedbrandsers = [];
+        foreach ($userRepository->findAll() as $val) {
+            if($brandRepository->findBrandOfId($val->getId()) instanceof Brand) {
+                $joinedbrandsers[$val->getId()] = new BrandUser(
+                    $val->getId(),
+                    $brandRepository->findBrandOfId($val->getId())->getBrandname(),
+                    $brandRepository->findBrandOfId($val->getId())->getName(),
+                    $val->getUsername(),
+                    $val->getFirstName(),
+                    $val->getLastName()
+                );
+            }
+        }
+        $this->brandusers = $brandusers ?? $joinedbrandsers;
     }
 
     /**

@@ -14,8 +14,11 @@ class InMemoryBrandUserRepositoryTest extends TestCase
     public function testFindAll()
     {
         $branduser = new BrandUser(1, 'microsoft', 'Microsoft', 'bill.gates', 'Bill', 'Gates');
+        $app = $this->getAppInstance();
 
-        $brandUserRepository = new InMemoryBrandUserRepository([1 => $branduser]);
+        /** @var Container $container */
+        $container = $app->getContainer();
+        $brandUserRepository = new InMemoryBrandUserRepository($container, [1 => $branduser]);
 
         $this->assertEquals([$branduser], $brandUserRepository->findAll());
     }
@@ -29,8 +32,11 @@ class InMemoryBrandUserRepositoryTest extends TestCase
             4 => new BrandUser(4, 'snapchat', 'Snapchat', 'evan.spiegel', 'Evan', 'Spiegel'),
             5 => new BrandUser(5, 'twitter', 'Twitter', 'jack.dorsey', 'Jack', 'Dorsey'),
         ];
+        $app = $this->getAppInstance();
 
-        $brandUserRepository = new InMemoryBrandUserRepository();
+        /** @var Container $container */
+        $container = $app->getContainer();
+        $brandUserRepository = new InMemoryBrandUserRepository($container);
 
         $this->assertEquals(array_values($brandusers), $brandUserRepository->findAll());
     }
@@ -38,15 +44,22 @@ class InMemoryBrandUserRepositoryTest extends TestCase
     public function testFindBrandUserOfId()
     {
         $branduser = new BrandUser(1, 'microsoft', 'Microsoft', 'bill.gates', 'Bill', 'Gates');
+        $app = $this->getAppInstance();
 
-        $brandUserRepository = new InMemoryBrandUserRepository([1 => $branduser]);
+        /** @var Container $container */
+        $container = $app->getContainer();
+        $brandUserRepository = new InMemoryBrandUserRepository($container, [1 => $branduser]);
 
         $this->assertEquals($branduser, $brandUserRepository->findBrandUserOfId(1));
     }
 
     public function testFindBrandUserOfIdThrowsNotFoundException()
     {
-        $brandUserRepository = new InMemoryBrandUserRepository([]);
+        $app = $this->getAppInstance();
+
+        /** @var Container $container */
+        $container = $app->getContainer();
+        $brandUserRepository = new InMemoryBrandUserRepository($container, []);
         $this->expectException(BrandUserNotFoundException::class);
         $brandUserRepository->findBrandUserOfId(1);
     }
