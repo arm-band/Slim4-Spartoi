@@ -12,7 +12,7 @@ use App\Domain\BrandUser\BrandUser;
 use App\Domain\BrandUser\BrandUserNotFoundException;
 use App\Domain\BrandUser\BrandUserRepository;
 
-class InMemoryBrandUserRepository implements BrandUserRepository
+class CombinedBrandUserRepository implements BrandUserRepository
 {
     /**
      * @var BrandUser[]

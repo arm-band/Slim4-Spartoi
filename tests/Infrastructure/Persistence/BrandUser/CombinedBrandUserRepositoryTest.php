@@ -6,10 +6,10 @@ namespace Tests\Infrastructure\Persistence\BrandUser;
 
 use App\Domain\BrandUser\BrandUser;
 use App\Domain\BrandUser\BrandUserNotFoundException;
-use App\Infrastructure\Persistence\BrandUser\InMemoryBrandUserRepository;
+use App\Infrastructure\Persistence\BrandUser\CombinedBrandUserRepository;
 use Tests\TestCase;
 
-class InMemoryBrandUserRepositoryTest extends TestCase
+class CombinedBrandUserRepositoryTest extends TestCase
 {
     public function testFindAll()
     {
@@ -18,7 +18,7 @@ class InMemoryBrandUserRepositoryTest extends TestCase
 
         /** @var Container $container */
         $container = $app->getContainer();
-        $brandUserRepository = new InMemoryBrandUserRepository($container, [1 => $branduser]);
+        $brandUserRepository = new CombinedBrandUserRepository($container, [1 => $branduser]);
 
         $this->assertEquals([$branduser], $brandUserRepository->findAll());
     }
@@ -36,7 +36,7 @@ class InMemoryBrandUserRepositoryTest extends TestCase
 
         /** @var Container $container */
         $container = $app->getContainer();
-        $brandUserRepository = new InMemoryBrandUserRepository($container);
+        $brandUserRepository = new CombinedBrandUserRepository($container);
 
         $this->assertEquals(array_values($brandusers), $brandUserRepository->findAll());
     }
@@ -48,7 +48,7 @@ class InMemoryBrandUserRepositoryTest extends TestCase
 
         /** @var Container $container */
         $container = $app->getContainer();
-        $brandUserRepository = new InMemoryBrandUserRepository($container, [1 => $branduser]);
+        $brandUserRepository = new CombinedBrandUserRepository($container, [1 => $branduser]);
 
         $this->assertEquals($branduser, $brandUserRepository->findBrandUserOfId(1));
     }
@@ -59,7 +59,7 @@ class InMemoryBrandUserRepositoryTest extends TestCase
 
         /** @var Container $container */
         $container = $app->getContainer();
-        $brandUserRepository = new InMemoryBrandUserRepository($container, []);
+        $brandUserRepository = new CombinedBrandUserRepository($container, []);
         $this->expectException(BrandUserNotFoundException::class);
         $brandUserRepository->findBrandUserOfId(1);
     }

@@ -7,7 +7,7 @@ use App\Infrastructure\Persistence\User\InMemoryUserRepository;
 use App\Domain\Brand\BrandRepository;
 use App\Infrastructure\Persistence\Brand\DBBrandRepository;
 use App\Domain\BrandUser\BrandUserRepository;
-use App\Infrastructure\Persistence\BrandUser\InMemoryBrandUserRepository;
+use App\Infrastructure\Persistence\BrandUser\CombinedBrandUserRepository;
 use DI\ContainerBuilder;
 
 return function (ContainerBuilder $containerBuilder) {
@@ -21,6 +21,6 @@ return function (ContainerBuilder $containerBuilder) {
     ]);
     // Here we map our BrandUserRepository interface to its in memory implementation
     $containerBuilder->addDefinitions([
-        BrandUserRepository::class => \DI\autowire(InMemoryBrandUserRepository::class),
+        BrandUserRepository::class => \DI\autowire(CombinedBrandUserRepository::class),
     ]);
 };
