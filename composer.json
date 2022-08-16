@@ -24,7 +24,7 @@
     "require": {
         "php": "^7.4 || ^8.0",
         "ext-json": "*",
-        "monolog/monolog": "^2.7",
+        "monolog/monolog": "^2.8",
         "php-di/php-di": "^6.4",
         "slim/psr7": "^1.5",
         "slim/slim": "^4.10",
@@ -43,6 +43,9 @@
         "lulco/phoenix": "^2.2.0"
     },
     "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        },
         "process-timeout": 0,
         "sort-packages": true,
         "allow-plugins": {
