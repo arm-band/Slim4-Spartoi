@@ -18,8 +18,8 @@ return function (ContainerBuilder $containerBuilder) {
                 'logError'            => $_ENV['LOG_ERROR'] === 'true' ? true : false,
                 'logErrorDetails'     => $_ENV['LOG_ERROR'] === 'true' ? true : false,
                 'logger' => [
-                    'name' => 'slim-app',
-                    'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
+                    'name' => isset($_ENV['APP_NAME']) && !empty($_ENV['APP_NAME']) ? $_ENV['APP_NAME'] : 'slim-app',
+                    'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app' . date('-Ymd') . '.log',
                     'level' => Logger::DEBUG,
                 ],
             ]);

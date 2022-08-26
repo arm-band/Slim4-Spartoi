@@ -38,6 +38,24 @@ if (is_readable(APPROOT_PATH . $DOT_ENV_SERVER . '.env')) {
     $dotenv->load();
 }
 
+// Timezone, Lang, Encoding
+$APP_TIMEZONE = isset($_ENV['APP_TIMEZONE']) && !empty($_ENV['APP_TIMEZONE']) ? $_ENV['APP_TIMEZONE'] : 'Asia/Tokyo';
+$APP_LANG = isset($_ENV['APP_LANG']) && !empty($_ENV['APP_LANG']) ? $_ENV['APP_LANG'] : 'ja';
+$APP_ENCODING = isset($_ENV['APP_ENCODING']) && !empty($_ENV['APP_ENCODING']) ? $_ENV['APP_ENCODING'] : 'UTF-8';
+date_default_timezone_set($APP_TIMEZONE);
+mb_language($APP_LANG);
+mb_internal_encoding($APP_ENCODING);
+
+// Xdebug var_dump
+if(isset($_ENV['DEBUG_MODE']) && !empty($_ENV['DEBUG_MODE'])) {
+    $debugFlag = preg_match('/^true$/i', $_ENV['DEBUG_MODE']) ? true : false;
+    if($debugFlag && function_exists('xdebug_disable')) {
+        ini_set('xdebug.var_display_max_children', '-1');
+        ini_set('xdebug.var_display_max_data', '-1');
+        ini_set('xdebug.var_display_max_depth', '-1');
+    }
+}
+
 // Instantiate PHP-DI ContainerBuilder
 $containerBuilder = new ContainerBuilder();
 
