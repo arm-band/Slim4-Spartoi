@@ -23,7 +23,7 @@ return function (App $app) {
     });
 
     $app->get('/', function (Request $request, Response $response) use ($c) {
-        $response->getBody()->write('Hello world!');
+        $response->getBody()->write("Hello {$_ENV['APP_NAME']}!");
         return $response;
     });
 
